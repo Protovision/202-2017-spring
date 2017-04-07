@@ -1,0 +1,177 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="main.css">
+	</head>
+	<body>
+		<h1>Standard streams and I/O manipulators</h1>
+		<p>
+			I assume you already have an understanding of the basic language features of C++, this includes: variable declarations, expressions, if statements, while statements, for statements, and functions. I also assume that you have had ample experience with using what are known as the standard streams. Experiences can be forgotten, and so let us review input/output in C++ while possibly learning something new about it. In C++, two of the standard streams are known as "cin" and "cout". 
+		</p>
+		<p>
+			Before reviewing the use of cin and cout let's first obtain a definition of a stream. The concept of stream is one in which data transfer can happen. A stream has two end points which are the two ends of communication from which data can be sent or received. A stream can take on different modes that dictate the direction of the data transfer. An input stream is a stream from which we can read data, but we cannot write data into. An output stream is a stream to which we can write data, but we cannot read data from. An input/output stream (abbreviated I/O stream) allows data to travel in both directions, it is a stream where both end points can be a sender or receiver of data at any time.
+		</p>
+		<p>
+			Now that we know that the standard streams are communication channels, what are the end points that are doing the communication in each case? For cin, the end point that is sending the data is usually the keyboard while the end point that is receiving the data is the program. For cout, the end point that is sending the data is the program while the end point that is receiving the data is usually your computer screen. I say that this is usually the case because it is the default mode of command-line interface (CLI) programs. This mode can be overridden by the command shell.
+		</p>
+		<p>
+			Recall the basic ways that your program can transfer data across cin and cout. The hello world program demonstrates data insertion into cout, the standard output stream:
+		</p>
+<code>
+#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+	cout &lt;&lt; "hello world!\n";
+	return 0;
+}
+</code>
+		<p>
+			Another simple program, one that reads a name and displays a greeting, demonstrates data extraction from cin (the standard input stream):
+		</p>
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+int main()
+{
+	string name;
+	cout &lt;&lt; "Enter your first name: ";
+	cin &gt;&gt; name;
+	cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "\n";
+	return 0;
+}
+</code>
+		<h3>Compiling</h3>
+		<p>
+			Compiling these codes into programs can be done using the following bash command:
+		</p>
+<code>
+g++-5 -std=c++14 -o program source.cpp
+</code>
+		<p>
+			Of course, you will not literally use this command every time you compile. You must replace "program" with the name of the program you wish to create and you must replace "source.cpp" with the name of the source file that contains the C++ code you are compiling. Notice too that this is using g++-5 which is one of the newer versions of the GNU C++ compiler, the one that supports the C++14 version of C++. If you are on a computer that has an older version of the GNU C++ compiler, this command will have to do:
+		</p>
+<code>
+g++ -std=c++11 -o program source.cpp
+</code>
+		<p>
+			I will throw around a lot of example code. My explanation of these codes will not be solidified in you until you compile and execute them yourself. Venturing forth into the unknown, capturing knowledge and putting it to work is the most authentic way to learn.
+		</p>
+		<h3>Word extraction and line extraction</h3>
+		<p>
+			Insertting data into cout is straightforward, using the &lt;&lt; operator (known as the insertion operator) works on any fundamental data type. Extracting data from cin is mainly done using the &gt;&gt; operator (known as the extraction operator) or the getline function. What is the difference between &gt;&gt; and getline?
+		</p>
+		<p>
+			Using &gt;&gt; on a stream will always extract a sequence of non-whitespace characters before converting them into the appropriate type for storing into the destination variable. getline will extract a line of characters from the stream and store it into a string.
+		</p>
+		<p>
+			In short, the expression <tt>cin &gt;&gt; x;</tt> is suitable if you want to read a word, integer, real number, or character into a: <tt>string</tt>, <tt>int</tt>, <tt>double</tt>, or <tt>char</tt> variable respectively. The expression <tt>getline(cin, x);</tt> is suitable for reading a line into a string variable.
+		</p>
+		<h3>Filter programs</h3>
+		<p>
+			A filter program processes all the items it can extract from it's standard input. The following filter program calculates the sum of all integers it reads:
+		</p>
+<code>
+#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+	int x;
+	int sum = 0;
+	while (cin &gt;&gt; x) {
+		sum += x;
+	}
+	cout &lt;&lt; sum &lt;&lt; endl;
+	return 0;
+}
+</code>
+		<p>
+			The interesting code fragment here is <tt>while (cin &gt;&gt; x)</tt>. In English, this can be read as "while an integer has been successfully extracted from cin into x". The basic concept is simple to grasp, but what the program is actually doing is more complicated.
+		</p>
+		<p>
+			Every time you use the insertion or extraction operator on a stream, the result of this expression is that same stream. This allows us to chain as many extra insertion or extraction operations as we like on the stream. Therefore, our while statement is analyzing cin after the extraction operator executed. However, cin is not a boolean type so how is it semantically possible to use it in the condition of a while statement? The answer is that there is a special property of cin, a function that executes and returns a boolean value whenever this stream is treated like a boolean value. Any value will be treated as a boolean when it is used in the context of an if or while statement. For cin, the boolean value it produces represents the success or failure of it's last I/O operation.
+		</p>
+		<p>
+			getline returns the same stream as it's first argument, therefore a filter program can process each line of input by using getline within a while statement. The following program indents all of it's lines of input:
+		</p>
+<code>
+#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+	string line;
+	while (getline(cin, line)) {
+		cout &lt;&lt; '\t' &lt;&lt; line &lt;&lt; endl;
+	}
+	return 0;
+}
+</code>
+		<p>
+			A filter program can also process all characters from it's input by using the get member function of an input stream. The following program converts all it's input characters to uppercase:
+		</p>
+<code>
+#include &lt;iostream&gt;
+#include &lt;locale&gt;
+using namespace std;
+int main()
+{
+	char c;
+	while (cin.get(c)) {
+		cout &lt;&lt; toupper(c, locale());
+	}
+	return 0;
+}
+</code>
+		<h3>I/O Manipulators</h3>
+		<p>
+			When working with formatted I/O streams, there are some standard library components that allows us to have some extra control over the formatting of our stream data. These components are known as I/O manipulators. 
+		</p>	
+		<p>
+			One of these manipulators is setw. setw stands for "set width" and it allows us to add extra necessary whitespace padding to the next value that we insert into the stream. setw is a function that we must execute before passing it's return value into an output stream. setw is useful for displaying table data. Study the following program:
+		</p>
+<code>
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+int main()
+{
+	int fahr; cels;
+	cout &lt;&lt; setw(12) &lt;&lt; "Fahrenheit" &lt;&lt; setw(12) &lt;&lt; "Celsius" &lt;&lt; endl;
+	for (int i = 0; i &lt; 24; ++i) cout &lt;&lt; '=';
+	cout &lt;&lt; endl;
+	for (fahr = 0; fahr &lt;= 300; fahr += 20) {
+		cels = 5 * (fahr-32) / 9;
+		cout &lt;&lt; setw(12) &lt;&lt; fahr &lt;&lt; setw(12) &lt;&lt; cels &lt;&lt; endl;
+	}
+	return 0;
+}
+</code>
+By using setw, this program produces the following output:
+<code>
+  Fahrenheit     Celsius
+========================
+           0         -17
+          20          -6
+          40           4
+          60          15
+          80          26
+         100          37
+         120          48
+         140          60
+         160          71
+         180          82
+         200          93
+         220         104
+         240         115
+         260         126
+         280         137
+         300         148
+</code>
+	<p>
+	The position of the text after using setw can be changed by using the left and right stream manipulators. The default is right-adjustment which means that everytime you use setw, the next insertion data will be adjusted to the right by padding whitespace to the left. To change this default behavior, just add <tt>cout &lt;&lt; left</tt> at the beginning of your program.
+	</p>
+	<p>
+		endl is also a stream manipulator, what it does is insert a newline character and "flushes" the stream. To flush a stream means to synchronize it with the file or device it is associated with. 
+	</p>
+	</body>
+</html>

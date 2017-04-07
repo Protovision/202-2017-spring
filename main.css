@@ -1,0 +1,34 @@
+
+table {
+	border-collapse: collapse;
+}
+th {
+	background-color: darkgray;
+	color: black;
+}
+table, th, td {
+	border: 1px solid black;
+	padding: 5px;
+}
+
+code {
+	border-style: solid;
+	border-width: thin;
+	display: block;
+	font-family: monospace;
+	white-space: pre;
+}
+tt {
+	display: inline;
+	font-family: monospace;
+	white-space: pre;
+	margin: 1em 0;
+}
+h1 { font-size: 24pt; }
+h2 { font-size: 20pt; }
+h3 { font-size: 16pt; }
+p, li, th, td { font-size: 12pt; }
+* {
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
