@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="main.css">
+	</head>
+	<body>
+		<h1>Vectors and Maps</h1>
+		<p>
+			While the fundamental types (bool, char, int, double, string) represent the most essential and singular pieces of data, we also have ways of organizing them together into one structure. 
+		</p>
+		<p>
+			C++ has a collection of types known as containers. If our program will use multiple integers, for instance, instead of having a seperate variable for each integer, we can have one variable that can store multiple integers. 
+		</p>
+		<p>
+			A container can store multiple values, each of these stored values are known as elements of the container. During the execution of our program, the container can insert or remove any number of elements. 
+		</p>
+		<p>
+			In C++, we have many different types of containers; each one has a different way of storing and providing access to it's elements. We will talk about four C++ containers in this course: vector, map, stack, and queue. However, you will learn that stack and queue are mere semblances whose real being is determined by a concealed vector or map.
+		</p>
+		<p>
+			We will look at the different ways in which we can initialize, iterate through, insert elements to, erase elements from, and query information about these containers.
+		</p>
+		<h3>Vectors</h3>
+		<p>
+			A vector can store any number of elements of the same type. Each element can be accessed by it's index. An index is an integer value with a range from zero to one less than the number of elements. 
+		</p>
+		<p>
+			This range is determined by convention and practicality. The inventor of a programming language could very well have container indexing for something like a vector start at 1 instead of zero, but as you learn about arrays and pointers you will see that zero-based indexing can be just as intuitive if not more intuitive than one-based indexing.
+		</p>
+		<p>
+			To grasp the effectiveness of a vector, let us compare two programs that calculate the sum of their input:
+		</p>
+		<p>
+			This program lets the user input a maximum of 5 integers before calculating the sum:
+		</p>
+<code>
+#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+	int a, b, c, d, e;
+	cout &lt;&lt; "Enter 5 integers: ";
+	cin &gt;&gt; a &gt;&gt; b &gt;&gt; c &gt;&gt; d &gt;&gt; e;
+	cout &lt;&lt; a + b + c + d + e &lt;&lt; endl;
+	return 0;
+}
+</code>
+		<p>
+			This other program lets the user input any number of integers to sum:
+		</p>
+<code>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+int main()
+{
+	int x;
+	vector&lt;int&gt; v;
+	cout &lt;&lt; "Enter integer values (Press CTRL-D when finished): ";
+	while (cin &gt;&gt; x) {
+		v.push_back(x);
+	}
+
+}
+</code>
+		<h3>Maps</h3>
+	</body>
+</html>
