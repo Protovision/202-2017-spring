@@ -1,0 +1,85 @@
+<html>
+
+<head>
+	<title>Lab 1 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Lab 1 Solutions</h1>
+
+nl.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	int ln = 1;
+	string line;
+
+	while (getline(cin, line)) {
+		cout &lt;&lt; ln++ &lt;&lt; '\t' &lt;&lt; line &lt;&lt; endl;
+	}
+	return 0;
+}
+</code>
+
+wc.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	int wc = 0;
+	string word;
+	
+	while (cin &gt;&gt; word) ++wc;
+	cout &lt;&lt; wc &lt;&lt; endl;
+	return 0;
+}
+</code>
+
+expand.cpp
+<code>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	char c;
+
+	while (cin.get(c)) {
+		if (c == '\t') cout &lt;&lt; "    ";
+		else cout &lt;&lt; c;
+	}
+	return 0;
+}
+</code>
+
+nbl.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	string line;
+
+	while (getline(cin, line)) {
+		if (line != "") cout &lt;&lt; line &lt;&lt; endl;
+	}
+	return 0;
+}
+</code>
+
+</body>
+
+</html>
+
