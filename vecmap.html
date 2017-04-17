@@ -14,7 +14,7 @@
 			A container can store multiple values, each of these stored values are known as elements of the container. During the execution of our program, the container can insert or remove any number of elements. 
 		</p>
 		<p>
-			In C++, we have many different types of containers; each one has a different way of storing and providing access to it's elements. We will talk about four C++ containers in this course: vector, map, stack, and queue. However, you will learn that stack and queue are mere semblances whose real being is determined by a concealed vector or map.
+			In C++, we have many different types of containers; each one has a different way of storing and providing access to it's elements. We will talk about four C++ containers in this course: vector, map, stack, and queue. However, you will learn that stack and queue are semblances enveloping a concealed vector or map.
 		</p>
 		<p>
 			We will look at the different ways in which we can initialize, iterate through, insert elements to, erase elements from, and query information about these containers.
@@ -27,41 +27,124 @@
 			This range is determined by convention and practicality. The inventor of a programming language could very well have container indexing for something like a vector start at 1 instead of zero, but as you learn about arrays and pointers you will see that zero-based indexing can be just as intuitive if not more intuitive than one-based indexing.
 		</p>
 		<p>
-			To grasp the effectiveness of a vector, let us compare two programs that calculate the sum of their input:
-		</p>
-		<p>
-			This program lets the user input a maximum of 5 integers before calculating the sum:
+			To grasp the effectiveness of a vector, let us look at a program that sorts it's lines of input:
 		</p>
 <code>
 #include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
 using namespace std;
 int main()
 {
-	int a, b, c, d, e;
-	cout &lt;&lt; "Enter 5 integers: ";
-	cin &gt;&gt; a &gt;&gt; b &gt;&gt; c &gt;&gt; d &gt;&gt; e;
-	cout &lt;&lt; a + b + c + d + e &lt;&lt; endl;
+	string line;
+	vector&lt;string&gt; v;
+	while (getline(cin, line)) v.push_back(line);
+	sort(v.begin(), v.end());
+	for (string&amp; e : v) cout &lt;&lt; e &lt;&lt; endl;
 	return 0;
 }
 </code>
 		<p>
-			This other program lets the user input any number of integers to sum:
+			The way the <tt>while</tt> statement is used here extracts and stores all lines from standard input into a vector of strings. The sort function rearranges the position of a container's elements in ascending order. Since the elements of our vector are strings, they will be sorted alphabetically. The <tt>for</tt> statement can be used to iterate over all elements in a container, when used in this mode it is known as a range-based for loop. 
+		</p>
+		<p>
+			Before range-based for loops were introduced in C++, one would typically iterate over a vector's elements using the subscript operator:
+		</p>
+<code>
+for (int i = 0; i &lt; v.size(); ++i)
+	cout &lt;&lt; v[i] &lt;&lt; endl;
+</code>
+		<p>
+			The range-based for loop lets us introduce a variable that will represent the next element of the container during each iteration of the for loop. 
+		</p>
+		<p>
+			The use of the member-of operator lets us access the <tt>push_back</tt>, <tt>begin</tt>, and <tt>end</tt> member functions of a vector. <tt>push_back</tt> creates a new element with a specified value and inserts it at the end of the vector. The <tt>begin</tt> and <tt>end</tt> member functions are used for producing iterators from the vector. An iterator references a particular element in a particular container, they can be used to "iterate" or cycle through a container's elements. A pair of iterators can signify a range of elements within a sequence container such as a vector.
+		</p>
+		<h3>Iterators</h3>
+		<p>
+			Every C++ container has a <tt>begin</tt> and <tt>end</tt> member function. <tt>begin</tt> will return an iterator to the first element of the container and <tt>end</tt> will return an iterator to exactly one position past the last element of the container. The type of an iterator will always be <tt>T::iterator</tt> where <tt>T</tt> is the type of the container. With this in mind, our sort program could have iterated over the vector in the following alternative way:
+		</p>
+<code>
+for (vector&lt;string&gt;::iterator it = v.begin(); it != v.end(); ++it)
+	cout &lt;&lt; *it &lt;&lt; endl;
+</code>
+		<p>
+			Using <tt>++</tt> on an iterator will advance it's position to the next element. Iterating over all the elements begins with an iterator equal to what the <tt>begin</tt> member function produces, and it stops when it reaches the value of what the <tt>end</tt> member function produces. To access and/or modify the value of the referenced element, you must "dereference" the iterator using <tt>*</tt>.
+		</p>
+		<p>
+			There are a collection of functions in &lt;algorithm&gt; which can process and manipulate the elements of any container through the use of iterators. The <tt>sort</tt> function, for example, sorts a range of elements that exist between the positions specified by two iterators. When we use the expression <tt>sort(v.begin(), v.end());</tt> we are sorting all the elements within v. 
+		</p>
+		<p>
+			Some containers have member functions that require the use of iterators. The vector, for example, not only has <tt>push_back</tt> and <tt>pop_back</tt> but it also has the more generalized versions of these: <tt>insert</tt> and <tt>erase</tt>. <tt>push_back</tt> inserts a new element at the end of the vector, but <tt>insert</tt> can insert a new element at any position in the vector. <tt>pop_back</tt> erases the last element of the vector, but <tt>erase</tt> can erase an element at any position in the vector. 
+		</p>
+		<p>
+			With knowledge of <tt>insert</tt>, we could have rewritten the expression <tt>v.push_back(line);</tt> to <tt>v.insert(v.end(), line);</tt> and we would get the same effect; <tt>v.insert(v.begin() + v.size(), line);</tt> would also do the same thing. The iterators of a vector are random-access, meaning we can perform addition and subtraction on them to compare the distances between two iterators or to advance an iterator a certain number of positions. 
+		</p>
+		<p>
+			The random-access property of vector iterators also means the expression <tt>v.end() - v.begin()</tt> will be equal to <tt>v.size()</tt>. I invite you to research and experiment with iterators and the standard library functions that operate on them.
+		</p>
+		<h3>Maps</h3>
+		<p>
+			The map can be seen as a more general version of a vector, where instead of directly accessing an element with an index, an element can be accessed with it's associated key. Every element in a map is a pair of values. For example, a container of type <tt>map&lt;string, int&gt;</tt> stores elements of type <tt>pair&lt;const string, int&gt;</tt>. Accessing any pair is possible if you know the first value stored in that pair, this first value is known as the key. The reason the first value in the pair is <tt>const</tt>, is because the keys of a map cannot be modified. The keys must also be unique from each other.
+		</p>
+		<p>
+			Here is an example of a program that can memorize "facts". A fact is defined here as a pair of associated strings, such as the definition of a word. 
 		</p>
 <code>
 #include &lt;iostream&gt;
-#include &lt;vector&gt;
+#include &lt;map&gt;
 using namespace std;
+
 int main()
 {
-	int x;
-	vector&lt;int&gt; v;
-	cout &lt;&lt; "Enter integer values (Press CTRL-D when finished): ";
-	while (cin &gt;&gt; x) {
-		v.push_back(x);
-	}
+	int o;
+	string fname, fdesc;
+	map&lt;string, string&gt; facts;
+	map&lt;string, string&gt;::iterator fact_it;
 
+	while (true) {
+		cout &lt;&lt;
+		endl &lt;&lt;
+		"Fact database" &lt;&lt; endl &lt;&lt;
+		endl &lt;&lt;
+		"1: Create new fact" &lt;&lt; endl &lt;&lt;
+		"2: List facts" &lt;&lt; endl &lt;&lt;
+		"3: Delete a fact" &lt;&lt; endl &lt;&lt;
+		"4: Exit" &lt;&lt; endl &lt;&lt;
+		endl &lt;&lt;
+		"&gt; ";
+		cin &gt;&gt; o;
+		if (o == 1) {
+			cout &lt;&lt; "Fact name: ";
+			getline(cin &gt;&gt; ws, fname);
+			cout &lt;&lt; "Fact description: ";
+			getline(cin, fdesc);
+			facts[fname] = fdesc;
+		} else if (o == 2) {
+			for (pair&lt;const string, string&gt;&amp; p : facts) {
+				cout &lt;&lt; p.first &lt;&lt; " -&gt; " &lt;&lt; p.second &lt;&lt; endl;
+			}
+		} else if (o == 3) {
+			cout &lt;&lt; "Fact name: ";
+			getline(cin &gt;&gt; ws, fname);
+			fact_it = facts.find(fname);
+			if (fact_it != facts.end()) {
+				facts.erase(fact_it);
+			}
+		} else if (o == 4) break;
+	}
+	return 0;
 }
 </code>
-		<h3>Maps</h3>
+	<p>
+		Try to compile and run this program before attempting to study it. This program demonstrates how to insert, list, and erase elements from a map.
+	</p>
+	<p>
+		On a side note, an expression like <tt>getline(cin &gt;&gt; ws, x)</tt> means to discard any whitespace from cin before attempting to read a line from it. This should be done if your program mixes &gt;&gt; and getline operations on cin. 
+	</p>
+	<p>
+		Although you could use an iterator to iterate through a map, a range-based for loop is simpler and will suffice. The most practical reason to use an iterator with a map is for erasing an element. Notice the difference between an an expression like <tt>facts[fname]</tt> and <tt>facts.find(fname)</tt>; the former will give you a reference to the second value of the pair containing <tt>fname</tt> as it's first value, the latter will give you an iterator to the pair containing <tt>fname</tt> as it's first value. You can pass this iterator to the <tt>erase</tt> member function to erase this pair from the map. 
+	</p>
 	</body>
 </html>
