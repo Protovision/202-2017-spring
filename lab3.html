@@ -1,0 +1,116 @@
+<html>
+
+<head>
+	<title>Lab 3</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Lab 3</h1>
+
+<p>
+Store all of your files for this lab in a folder named "lab3". 
+</p>
+
+<p>
+You will create password cracking programs for this assignment. The two exercises will contain source code to a program that reads password attempts from cin. By connecting the output of your own program to the input of these password-protected programs, you can automate password input and create an exploit. For our circumstances, to successfully crack one of these programs means to force it to display the "Access granted." message.
+</p>
+
+<h3>Exercise 1</h3>
+
+<p>
+The following program will continually ask you to guess a three-letter password. The password is set to three random lowercase letters each time the program is executed. 
+</p>
+
+<code>
+#include &lt;iostream&gt;
+#include &lt;random&gt;
+using namespace std;
+
+int main()
+{
+    default_random_engine prng(random_device{}());
+    uniform_int_distribution&lt;char&gt; dist('a','z');
+    string password;
+    string guess;
+
+    for (int i = 0; i &lt; 3; ++i) password += dist(prng);
+    while (true) {
+        cout &lt;&lt; "Guess 3-letter password: ";
+        cin &gt;&gt; guess;
+        cout &lt;&lt; "You guessed: " &lt;&lt; guess &lt;&lt; endl;
+        if (guess == password) {
+            cout &lt;&lt; "Access granted." &lt;&lt; endl;
+            break;
+        } else {
+            cout &lt;&lt; "Access denied." &lt;&lt; endl;
+        }
+    }
+    return 0;
+}
+</code>
+
+<p>
+Save the above program source as "password1.cpp" and compile it into a program named "password1". Then create your own program that can crack the password for the password1 program. Name your source file "crack1.cpp" and name your program "crack1". 
+</p>
+
+<p>
+To test your crack1 program with the password1 program, use the following command:
+</p>
+
+<code>
+./crack1 | ./password1
+</code>
+
+<h3>Exercise 2</h3>
+
+<p>
+The following program will ask you to guess a six-letter password once. The password is set to six random lowercase letters each time the program is executed; the program terminates after the first guess.
+</p>
+
+<code>
+#include &lt;iostream&gt;
+#include &lt;random&gt;
+using namespace std;
+
+default_random_engine prng(random_device{}());
+uniform_int_distribution&lt;char&gt; dist('a', 'z');
+
+int main()
+{
+	char c;
+	int i = 0;
+	char key[12];
+	char password[12];
+
+	cout &lt;&lt; "Generating random 6-letter password..." &lt;&lt; endl;
+	generate_n(key, 6, [&amp;](){ return dist(prng); });
+	cout &lt;&lt; "Enter password: ";
+	while (cin.get(c) and c != '\n') password[i++] = c;
+	password[i] = 0;
+	if (strcmp(password, key) == 0) cout &lt;&lt; "Access granted." &lt;&lt; endl;
+	else cout &lt;&lt; "Access denied." &lt;&lt; endl;
+}
+</code>
+
+<p>
+Save the above program source as "password2.cpp" and compile it into a program named "password2" using this command:
+</p>
+
+<code>
+g++-5 -std=c++14 -fno-stack-protector -o password2 password2.cpp
+</code>
+
+<p>
+Then create your own program that can crack the password for the password2 program. Name your source file "crack2.cpp" and name your program "crack2". Test your password cracking program with password2 using the following command:
+</p>
+
+<code>
+./crack2 | ./password2
+</code>
+
+</body>
+
+</html>
