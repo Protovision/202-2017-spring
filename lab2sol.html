@@ -1,0 +1,105 @@
+<html>
+
+<head>
+	<title>Lab 2 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solutions for lab 2</h1>
+
+median.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main()
+{
+	double n;
+	vector&lt;double&gt; v;
+	while (cin &gt;&gt; n) v.push_back(n);
+	sort(v.begin(), v.end());
+	if (v.size() % 2 == 1) {
+		cout &lt;&lt; v[v.size() / 2] &lt;&lt; endl;
+	} else {
+		cout &lt;&lt;
+		((v[v.size() / 2 - 1] + v[v.size() / 2]) / 2) &lt;&lt;
+		endl;
+	}
+	return 0;
+}
+</code>
+
+stddev.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+using namespace std;
+
+double mean(const vector&lt;double&gt;&amp; v)
+{
+	double s = 0.0;
+	for (double x : v) s += x;
+	return s / v.size();
+}
+
+double stddev(const vector&lt;double&gt;&amp; v)
+{
+	double m = mean(v), s = 0.0;
+	for (double x : v) s += pow(x - m, 2.0);
+	return sqrt(s / (v.size() - 1));
+}
+
+int main()
+{
+	double n;
+	vector&lt;double&gt; v;
+	while (cin &gt;&gt; n) v.push_back(n);
+	cout &lt;&lt; stddev(v) &lt;&lt; endl;
+	return 0;
+}
+</code>
+
+mode.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+
+int main()
+{
+	double n;
+	map&lt;double, int&gt; m;
+	pair&lt;double, int&gt; mode;
+	while (cin &gt;&gt; n) ++m[n];
+	for (auto&amp; p : m) {
+		if (p.second &gt; mode.second)
+			mode = p;
+	}
+	cout &lt;&lt; mode.first &lt;&lt; endl;
+	return 0;
+}
+</code>
+
+palindrome.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	string s;
+	getline(cin, s);
+	return (s == string(s.rbegin(), s.rend()) ? 0 : 1);
+}
+</code>
+
+</body>
+
+</html>
