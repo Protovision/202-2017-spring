@@ -115,6 +115,26 @@ fringilla ut, venenatis ut, neque.
 Name your source file "fold.cpp" and name your program "fold".
 </p>
 
+<p>
+To convert a string to an integer, use the <tt>stoi</tt> function.
+</p>
+
+<h3>Converting the argv array into a vector</h3>
+
+<p>
+It is not necessary, but you may find it useful to convert argv into a vector. Thus you may being your main function as follows:
+</p>
+
+<code>
+int main(int argc, char *argv[])
+{
+	vector&lt;string&gt; args(argv, argv + argc);
+</code>
+
+<p>
+After the args vector has been created, you can ignore argc and argv. Every element in args will be a C++ string copy of the C-strings existing in argv. <tt>args.size()</tt> will be equal to argc.
+</p>
+
 </body>
 
 </html>
