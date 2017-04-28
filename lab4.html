@@ -22,7 +22,98 @@ Create a program that reads a file (specified as a command-line argument) and di
 
 <h3>Exercise 2</h3>
 
+<p>
+Create a program that concatenates the lines of two files horizontally with a tab character joining each concatenated line. This program will work like the "paste" command in Bash. To get an idea of how paste works, suppose you have the following two files:
+</p>
 
+names.txt
+<code>
+Mark Smith
+Bobby Brown
+Sue Miller
+Jenny Igotit
+</code>
+
+numbers.txt
+<code>
+555-1234
+555-9876
+555-6743
+867-5309
+</code>
+
+<p>
+The command <tt>paste names.txt numbers.txt</tt> would produce the following standard output:
+</p>
+
+<code>
+Mark Smith	555-1234
+Bobby Brown	555-9876
+Sue Miller	555-6743
+Jenny Igotit	867-5309
+</code>
+
+<p>
+This program should operate on two files specified on the command-line. Name your source file "paste.cpp" and name your program "paste".
+</p>
+
+<h3>Exercise 3</h3>
+
+<p>
+Create a program that folds the text inside a file like the existing fold command. Your program should accept two command-line arguments: the file to fold, and the maximum length of each line. Your program should modify the specified file by inserting a new line on every line that exceeds the specified maximum length. As an example, suppose you had the following file:
+</p>
+
+latin.txt
+<code>
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur dignissim
+venenatis pede. Quisque dui dui, ultricies ut, facilisis non, pulvinar non,
+purus. Duis quis arcu a purus volutpat iaculis. Morbi id dui in diam ornare
+dictum. Praesent consectetuer vehicula ipsum. Praesent tortor massa, congue et,
+ornare in, posuere eget, pede. 
+
+Vivamus rhoncus. Quisque lacus. In hac habitasse platea dictumst. Nullam mauris
+tellus, sollicitudin non, semper eget, sodales non, pede. Phasellus varius
+ullamcorper libero. Fusce ipsum lorem, iaculis nec, vulputate vitae, suscipit
+vel, tortor. Cras varius.
+
+Nullam fringilla pellentesque orci. Nulla eu ante pulvinar velit rhoncus
+lacinia. Morbi fringilla lacus quis arcu. Vestibulum sem quam, dapibus in,
+fringilla ut, venenatis ut, neque.
+</code>
+
+<p>
+Running your program as <tt>./fold latin.txt 50</tt> would modify latin.txt to contain:
+</p>
+
+<code>
+Lorem ipsum dolor sit amet, consectetuer adipiscin
+g elit. Curabitur dignissim
+venenatis pede. Quisque dui dui, ultricies ut, fac
+ilisis non, pulvinar non,
+purus. Duis quis arcu a purus volutpat iaculis. Mo
+rbi id dui in diam ornare
+dictum. Praesent consectetuer vehicula ipsum. Prae
+sent tortor massa, congue et,
+ornare in, posuere eget, pede. 
+
+Vivamus rhoncus. Quisque lacus. In hac habitasse p
+latea dictumst. Nullam mauris
+tellus, sollicitudin non, semper eget, sodales non
+, pede. Phasellus varius
+ullamcorper libero. Fusce ipsum lorem, iaculis nec
+, vulputate vitae, suscipit
+vel, tortor. Cras varius.
+
+Nullam fringilla pellentesque orci. Nulla eu ante 
+pulvinar velit rhoncus
+lacinia. Morbi fringilla lacus quis arcu. Vestibul
+um sem quam, dapibus in,
+fringilla ut, venenatis ut, neque.
+</code>
+
+<p>
+Name your source file "fold.cpp" and name your program "fold".
+</p>
 
 </body>
 
