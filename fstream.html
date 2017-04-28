@@ -1,0 +1,173 @@
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>File streams</h1>
+
+<p>
+Until now you have been working with the standard streams to transfer data in your program. There are components found in &lt;fstream&gt; for creating streams that associated with files, these are known as file streams. Using file streams, we can create or open a file and read or write data on it. 
+</p>
+
+<p>
+In Bash, the "cat" command can be used to dump the contents of a file in the terminal. Here is a basic implementation of cat that uses a file stream:
+</p>
+
+<code>
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+	char c;
+	fstream f(argv[1], fstream::in);
+
+	while (f.get(c)) cout.put(c);
+	return 0;
+}
+</code>
+
+<p>
+It is a simplied version of cat because it only reads one file. The file to read comes in through the command-line arguments. The argv array contain a C-string for each command-line argument. <tt>argv[0]</tt> is the name of the executing program and <tt>argv[1]</tt> is the first argument. argc is the count of arguments on the command-line, it is the number of C-strings stored in argv, therefore the last argument is <tt>argv[argc - 1]</tt>.
+</p>
+
+<p>
+The <tt>fstream</tt> type can be explicitly initialized with the name of a file to open as well as the open mode. The open mode specifies how to open the file, <tt>fstream::in</tt> means to open this file for input operations (reading). When successfully opened, this file stream object is associated with the open file.  A file stream opened with <tt>fstream::in</tt> set, can use the getline function, get member function, and the extraction operator to read from the file. In our example, we use the get member function to read each byte/character from the file and we forward whatever we read to <tt>cout</tt>.
+</p>
+
+<p>
+Here is a more robust implementation of the cat command, it dumps the contents of each file specified on the command-line into standard output. It ignores any files that fail to open:
+</p>
+
+<code>
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+	char c;
+	fstream f;
+
+	for (int i = 1; i &lt; argc; ++i) {
+		f.open(argv[i], fstream::in);
+		if (not f) continue;
+		while (f.get(c)) cout.put(c);
+		f.close();
+	}
+	return 0;
+}
+</code>
+
+<p>
+Notice here that the f object is declared without an initial file to open, this is legal. The <tt>open</tt> and <tt>close</tt> member functions can associate or disassociate a file with an input file stream, respectively. Transferring data on a file stream cannot happen unless it has opened a file first. The file associated with a file stream closes when the file stream goes out of scope or when the close member function is executed.
+</p>
+
+<h3>Open modes</h3>
+
+<p>
+When opening a file, figuring out what open mode to use can be difficult for beginners. The open mode can be a combination of values merged together using the bitwise-or operator. Here are some common open modes:
+</p>
+
+<table>
+	<tr>
+		<th>Open mode</th>
+		<th>Meaning</th>
+	</tr>
+	<tr>
+		<td><tt>fstream::in</tt></td>
+		<td>Open file for input</td>
+	</tr>
+	<tr>
+		<td><tt>fstream::out | fstream::trunc</tt></td>
+		<td>Create or truncate file and open it for output</td>
+	</tr>
+	<tr>
+		<td><tt>fstream::out | fstream::app</tt></td>
+		<td>Open file for output. All output data gets appended to the file (written at end of file)</td>
+	</tr>
+	<tr>
+		<td><tt>fstream::in | fstream::out</tt></td>
+		<td>Open file for input and output</td>
+	</tr>
+	<tr>
+		<td><tt>fstream::in | fstream::out | fstream::trunc</tt></td>
+		<td>Create or truncate file and open it for input and output</td>
+	</tr>
+	<tr>
+		<td><tt>fstream::in | fstream::out | fstream::app</tt></td>
+		<td>Open file for input and output. All output data gets appended to the file</td>
+	</tr>
+</table>
+
+<p>
+Although not specified in the table, the modes <tt>fstream::out</tt> and <tt>fstream::out | fstream::trunc</tt> are equivalent.
+</p>
+
+<h3>Saving and loading vectors</h3>
+
+<p>
+Files are useful for programs that require more long term storage as opposed to variables that only persist for as long as the program is active. One can easily save something like a <tt>vector&lt;double&gt; v</tt> to a file named "numbers.txt":
+</p>
+
+<code>
+fstream f("numbers.txt", fstream::out | fstream::trunc);
+for (double x : v) f &lt;&lt; x &lt;&lt; endl;
+</code>
+
+<p>
+Loading a file named "numbers.txt", containing double values, into <tt>vector&lt;double&gt; v</tt> can be done like this:
+</p>
+
+<code>
+double n;
+fstream f("numbers.txt", fstream::in);
+v = {};
+while (f &gt;&gt; n) v.push_back(n);
+</code>
+
+<p>
+Saving a collection of strings into a file can be done by using the <tt>quoted</tt> stream manipulator from &lt;iomanip&gt;. Saving a vector of strings named v into the file strings.dat can be done like this:
+</p>
+
+<code>
+/* Make sure to include &lt;iomanip&gt; */
+fstream f("strings.dat", fstream::out | fstream::trunc);
+for (string&amp; s : v) f &lt;&lt; quoted(x);
+</code>
+
+<p>
+To load "strings.dat" back into your string vector:
+</p>
+
+<code>
+string s;
+fstream f("strings.dat", fstream::in);
+v = {};
+while (f &gt;&gt; quoted(s)) v.push_back(s);
+</code>
+
+<p>
+When <tt>quoted</tt> is used for an output operation, the string will be surrounded by double-quotes and any double-quotes inside the string will be escaped with a backslash before being sent into the stream. When <tt>quoted</tt> is used for an input operation, the stream will extract the expected double-quoted character sequence with any embedded, escaped double-quotes unescaped back into real double-quotes.
+</p>
+
+<p>
+Another way to explain it is that <tt>quoted</tt> formats your string so that it can be distinguishable from other strings when stored in a file. Use <tt>quoted</tt> again to retrieve strings from a file that were previously stored using <tt>quoted</tt>.
+</p>
+
+<p>
+<tt>quoted</tt> is very useful, but it is only available starting from the C++14 version of C++. You will have to figure out another way to store strings in files when you are dealing with C++ compilers that use older versions of C++.
+</p>
+
+<p>
+If your vector has elements of more complicated types, you will have to use your judgement as to how you will represent the stored data in a file. How you design this representation must be consistent so that you can reliably store and load your data with no errors. Once you master this, saving other structures like maps or a custom class will be trivial.
+</p>
+
+</body>
+
+</html>
+

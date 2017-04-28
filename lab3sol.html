@@ -1,0 +1,56 @@
+<html>
+
+<head>
+	<title>Lab 3 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solutions for lab 3</h1>
+
+crack1.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	string pass = "aaa";
+
+	while (pass[0] &lt;= 'z') {
+		while (pass[1] &lt;= 'z') {
+			while (pass[2] &lt;= 'z') {
+				cout &lt;&lt; pass &lt;&lt; endl;
+				++pass[2];
+			}
+			pass[2] = 'a';
+			++pass[1];
+		}
+		pass[1] = 'a';
+		++pass[0];
+	}
+	return 0;
+}
+</code>
+
+crack2.cpp
+<code>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	for (int i = 0; i &lt; 15; ++i) cout.put('A');
+	cout.put('\0');
+	for (int i = 0; i &lt; 15; ++i) cout.put('A');
+	cout.put('\0');
+	return 0;
+}
+</code>
+
+</body>
+
+</html>
