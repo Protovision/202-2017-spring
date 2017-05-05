@@ -1,0 +1,102 @@
+<html>
+
+<head>
+	<title>Lab 4 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solutions for lab 4</h1>
+
+reverse.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;fstream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+	vector&lt;char&gt; v;
+	fstream f;
+	char c;
+
+	if (argc != 2) return 0;
+	f.open(argv[1], fstream::in);
+	if (not f) return 1;
+	while (f.get(c)) v.push_back(c);
+	f.close();
+	for_each(v.rbegin(), v.rend(), [](char e){ cout.put(e); });
+	return 0;
+}
+</code>
+
+paste.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;fstream&gt;
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+		fstream fs1, fs2;
+		string line1, line2;
+
+		if (argc != 3) return 0;
+		fs1.open(argv[1], fstream::in);
+		fs2.open(argv[2], fstream::in);
+		if (not fs1 or not fs2) return 1;
+		while (true) {
+			if (not getline(fs1, line1)) line1 = "";
+			if (not getline(fs2, line2)) line2 = "";
+			if (not fs1 and not fs2) break;
+			cout &lt;&lt; line1 &lt;&lt; '\t' &lt;&lt; line2 &lt;&lt; endl;
+		}
+		return 0;
+}
+</code>
+
+fold.cpp
+<code>
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+	int i, width;
+	char c;
+	fstream fs;
+	stringstream ss;
+
+	if (argc != 3) return 0;
+	fs.open(argv[1], fstream::in);
+	if (not fs) return 1;
+	width = stoi(argv[2]);
+	i = 0;
+	while (fs.get(c)) {
+		if (i == width) {
+			ss.put('\n');
+			i = 0;
+		} else {
+			ss.put(c);
+			if (c == '\n') i = 0;
+			else ++i;
+		}
+	}
+	fs.close();
+	fs.open(argv[1], fstream::out);
+	fs &lt;&lt; ss.str();
+	return 0;
+}
+</code>
+
+</body>
+
+</html>

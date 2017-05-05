@@ -1,0 +1,39 @@
+<html>
+
+<head>
+	<title>Lab 5</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Lab 5</h1>
+
+<p>
+Store all of your files for this lab in a folder named "lab5". 
+</p>
+
+<p>
+Create a postfix notation calculator. "Postfix notation" is a particular way to order the operands and operators in an expression. In postfix notation, operands get pushed onto the stack and operators replace one or more values from the top of the stack with a new value that represents the result of some computation. For example, the mathematical expression "5 * (3 + 4)" is represented as "3 4 + 5 *" in postfix notation. Your postfix notation calculator should conform to these specifications:
+</p>
+
+<ul>
+<li>Your program should evaluate each line from standard input as a postfix math expression.</li>
+<li>The following operators and functions should be supported: <tt>+, -, *, /, %, ^, !, sqrt, sin, cos, tan, log, ln</tt></li>
+<li>Operands should be stored as type <tt>double</tt> in your program.</li>
+<li>If an operand's string value is "e" or "pi", then the values of the C++ constants M_E or M_PI should be used instead.</li>
+<li>Your program should ignore malformed expressions. An expression can be malformed when an operator is being used while there are not enough numbers available from the top of the stack.</li>
+</ul>
+
+<p>
+You will need to include &lt;cmath&gt; to use M_E, M_PI, and various math functions.
+</p>
+
+<p>
+Name your source file "calc.cpp" and name your program "calc".
+</p>
+
+</body>
+
+</html>
