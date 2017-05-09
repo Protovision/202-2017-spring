@@ -1,0 +1,79 @@
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>String streams</h1>
+
+<p>
+A string stream is very similar to a file stream. A file stream is associated with a file, the file can be both the source and destination of data transfer depending on the open mode. A string stream, on the other hand, is associated with a string (that is, a sequence of characters). Inserting or extracting data happens on the internal string that is stored in the string stream. You may use the insertion operator to insert string representations of certain non-string values into the string stream, and you may use the extraction operator to reconstruct non-string values out of their string representations. This functionality is already possible with a file stream, the only difference is the type of storage that the stream is associated with: a file stream is associated with a file, a string stream is associated with a string. Files are long-term forms of data storage, but a string stores data for only as long as the program is active.
+</p>
+
+<p>
+The type of a string stream is <tt>stringstream</tt> and it is found in &lt;sstream&gt;. Declaring a stringstream variable will initialize it's internal string to be empty, you may optionally declare a stringstream with an existing string to initialize it with.
+</p>
+
+<p>
+Let's look at a program that constructs a string-string map from a file. Consider a file named phonebook.txt and it contained:
+</p>
+
+<code>
+Mark Smith	555-1234
+Bobby Brown	555-9876
+Sue Miller	555-6743
+Jenny Igotit	867-5309
+</code>
+
+<p>
+To load this file into a <tt>map&lt;string, string&gt;</tt> where each pair contained the full name for the first value and the phone number for the second value, this function could be used:
+</p>
+
+<code>
+map&lt;string, string&gt; load_phonebook(string filename)
+{
+	string line;	
+	fstream f(filename, fstream::in);
+	stringstream ss;
+	map&lt;string, string&gt; m;
+
+	while (getline(f, line)) {
+		if (line == "") continue;
+		string first_name, last_name, phone_number;
+		ss = stringstream(line);
+		ss &gt;&gt; first_name &gt;&gt; last_name &gt;&gt; phone_number;
+		m[first_name + ' ' + last_name] = phone_number;
+	}
+	return m;
+}
+</code>
+
+<p>
+In this example, each line is treated as an entry to be processed. The stringstream class and it's ability to be constructed out of existing strings, makes it easy for us to recursively extract data out of strings that were previously obtained from other extraction operations.
+</p>
+
+<p>
+This process can be reversed, our phonebook can be converted from a map back into a string using a stringstream:
+</p>
+
+<code>
+string serialize_phonebook(map&lt;string, string&gt;&amp; m)
+{
+	stringstream ss;
+	ss &lt;&lt; left;
+	for (pair&lt;const string, string&gt;&amp; p : m) {
+		ss &lt;&lt; setw(20) &lt;&lt; p.first &lt;&lt; setw(20) &lt;&lt; p.second &lt;&lt; endl;
+	}
+	return ss.str();
+}
+</code>
+
+<p>
+Using the insertion operators and stream manipulators, a string can be created with special formatting in a stringstream. When you are ready, the str member function returns a copy of the stream's internal string.
+</p>
+
+</body>
+
+</html>
