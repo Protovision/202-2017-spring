@@ -1,0 +1,177 @@
+<html> 
+<head>
+	<title>Lab 7</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Lab 7</h1>
+
+<p>
+Store all of your files for this lab in a folder named "lab7". 
+</p>
+
+<h3>Exercise 1</h3>
+
+<p>
+For this exercise you will recreate the program from lab 6 exercise 2 using classes.
+</p>
+
+<p>
+Save the following source file as "main.cpp"
+</p>
+
+<code>
+#include "Deck.h"
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	Deck deck;
+	deck.shuffle();
+	while (not deck.empty()) {
+		cout &lt;&lt; deck.draw().to_string() &lt;&lt; endl;
+	}
+}
+</code>
+
+<p>
+The code in main.cpp uses a custom type named Deck which was included from "Deck.h". "Deck.h" contains the following C++ declarations:
+</p>
+
+<code>
+#ifndef DECK_H
+#define DECK_H
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;random&gt;
+#include &lt;algorithm&gt;
+
+class Card {
+public:
+	int rank;
+	int suit;
+	std::string to_string() const;
+};
+
+class Deck {
+private:
+	std::vector&lt;Card&gt; cards;
+	std::default_random_engine re;
+public:
+	Deck();
+	void shuffle();
+	void reset();
+	Card draw();
+	bool empty() const;
+};
+
+#endif
+</code>
+
+<p>
+The type Deck represents a standard 52-card deck. It proffers five member functions:
+</p>
+
+<ul>
+	<li>shuffle: Shuffles the cards within the Deck.</li>
+	<li>reset: Resets the Deck to it's initial state, with all 52 cards present.</li>
+	<li>draw: Removes the top card from the Deck and returns it from this function.</li>
+	<li>empty: Returns true if there are no more cards in the deck (due to multiple calls to the draw function)</li>
+</ul>
+
+<p>
+Internally, the deck uses a vector to store all of it's cards. It also stores a random engine for use by the shuffle member function. Each card is stored as type Card, defined by the Card class.
+</p>
+
+<p>
+The Card class represents a card with 2 integers. These 2 integers indicate the rank and suit of the card. The rank member variable will be 2-10 if the rank of the card is 2-10, respectively. Ranks Jack, Queen, King, and Ace will be indicated by values 11, 12, 13, and 14 respectively. The suit member variable will have a range of 1-4 depending on if the suit of the card is Clubs, Diamonds, Hearts, or Spades. The to_string member function of Card will return a string of the form "&lt;RANK&gt; of &lt;SUIT&gt;" representing the current rank and suit of the card.
+</p>
+
+<p>
+Your job is to implement the functionality of the Deck and Card classes by creating Deck.cpp. The following is a template to Deck.cpp to help you get started:
+</p>
+
+<code>
+#include "Deck.h"
+
+std::string Card::to_string() const
+{
+
+}
+
+Deck::Deck()
+{
+
+}
+
+void Deck::shuffle()
+{
+
+}
+
+void Deck::reset()
+{
+
+}
+
+Card Deck::draw()
+{
+
+}
+
+bool Deck::empty() const
+{
+
+}
+</code>
+
+<p>
+Keep in mind that the code in Deck.cpp and Deck.h is not under the context of "<tt>using namespace std;</tt>", any use of standard library components requires that you prepend <tt>std::</tt> before it's identifier.
+</p>
+
+<p>
+When you are finished coding, you should have four files: main.cpp, Deck.h, and Deck.cpp. To compile the whole program use the following Bash command:
+</p>
+
+<code>
+g++-5 -std=c++14 -o shuffled main.cpp Deck.cpp
+</code>
+
+<p>
+The above command will compile main.cpp and Deck.cpp to create the program named "shuffled".
+</p>
+
+<h3>Exercise 2</h3>
+
+<p>
+Create a program that deals 5 random cards from a 52-card deck and determines if the dealt cards belong to the following poker hand categories:
+</p>
+
+<ul>
+	<li>Four of a Kind: 4 cards of the same rank and 1 card of another rank</li>
+	<li>Full house: 3 cards of one rank and 2 cards of another rank</li>
+	<li>Three of a Kind: 3 cards of the same rank and 2 cards of 2 other ranks.</li>
+	<li>Two pair: 2 cards of the same rank, 2 cards of another rank, and 1 card of a third rank</li>
+	<li>One pair: 2 cards of the same rank, and 3 cards of 3 other ranks</li>
+	<li>Nothing: None of the above categories</li>
+</ul>
+
+<p>
+There are more poker hand categories which you may have to implement in another assignment.
+</p>
+
+<p>
+You must use code declared in Deck.h and implemented by your Deck.cpp for this exercise. Name your source file containing your main function "ph.cpp" and name your program "ph". 
+</p>
+
+<p>
+Hint: Create a map where each pair stores a unique rank and the number of times that rank occurs in the hand. You can also use the count_if function from &lt;algorithm&gt; to determine how many pairs or threes are in the set.
+</p>
+
+</body>
+
+</html>
