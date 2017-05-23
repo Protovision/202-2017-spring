@@ -1,0 +1,107 @@
+<html>
+
+<head>
+	<title>Classes 1</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<p>
+Classes are an essential concept for C++ as well as for computer programming in general. A class is a programming language feature that is the means towards specifying a new data type. A class can also refer to how a new data type was specified within a programming language (for example one can say that string is a class).
+</p>
+
+<p>
+A data type, by the way, is what gives the syntactic and semantic meaning of a piece of data. The syntax used to present a piece of data is what reveals it's type, this is why we can distinguish 1, '1', and 1.0, and as being an integer, a char, and a double respectively. The most basic types that are built into the programming language are known as the fundamental types. In C++ a few of the fundamental types include: bool, char, int, and double. All other types that are not fundamental types are compound types. All compound types depend on the fundamental types to exist. Compound types include class types, pointer types, reference types, enum types, struct types, function types, etc.
+</p>
+
+<p>
+The creation of a class type is the creation of a compound type because a class can contain, for example, 2 integers. If you were present last lecture, I showed this class as an example:
+</p>
+
+<code>
+class Card {
+public:
+	int rank;
+	int suit;
+};
+</code>
+
+<p>
+From this code, "Card" is now a new type. Not only is it a type, it is a class type because it was created through a class. This class is so simple that it can be initialized using this syntax:
+</p>
+
+<code>
+Card c{ 3, 1 };
+</code>
+
+<p>
+Now the member variables rank and suit of variable c contain values 3 and 1 respectively. You may observe this through a test with cout:
+</p>
+
+<code>
+cout &lt;&lt; c.rank &lt;&lt; c.suit &lt;&lt; endl;
+</code>
+
+<p>
+The way variable c was initialized is known as list initialization. List initialization is when a brace-enclosed list of expressions is used to initialize an object. In C++, an object can refer to a lot of things, but people usually use it to describe the manifestation of a class. The cout variable is an object, the temporary object <tt>Card{5, 5}</tt> is an object, <tt>"Hello"s</tt> is an object because it is of the string class type (as distinguished from char*).
+
+<p>
+Any time you wish, any of the individuals members of Card c can be modified using the member-of operator; <tt>c.rank = 7;</tt> sets the rank member variable of c to 7. Keep in mind that this does not modify the Card class, this modifies an object of the Card class which in this case is stored in a variable called c. A program can have multiple Card objects each containing their own copies of their own rank and suit integers.
+</p>
+
+<p>
+A class does not need to just contain variable declarations, it may contain functions:
+</p>
+
+<code>
+class Card {
+public:
+	int rank;
+	int suit;
+	bool is_red() const
+	{
+		return suit == 2 or suit == 3;
+	}
+};
+</code>
+
+<p>
+If we ordain the valid values of suit as 1 through 4 which represent Clubs, Diamonds, Hearts, and Spades, then a Card object is a "red" if it's suit is 2 or 3 which represent Diamonds or Hearts. The "const" qualifier means this member function does not modify any variables within the object. 
+</p>
+
+<p>
+The implementation of is_red need not be inside the class declaration, it can just be declared like this:
+</p>
+
+<code>
+class Card {
+public:
+	int rank;
+	int suit;
+	bool is_red() const;
+};
+</code>
+
+<p>
+And somewhere else, either outside the class declaration or perhaps in a different cpp file, it can be implemented:
+</p>
+
+<code>
+bool Card::is_red() const
+{
+	return suit == 2 or suit == 3;
+}
+</code>
+
+<p>
+It is not always necessary but it is good practice to have .h files only contain declarations of classes and functions while the .cpp files contain the bodies of functions. See Lab 7 for an explanation of how to do this.
+</p>
+
+<h3>Constructors</h3>
+
+To be continued...
+
+</body>
+
+</html>
