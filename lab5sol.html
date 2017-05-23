@@ -1,0 +1,153 @@
+<html>
+
+<head>
+	<title>Lab 5 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solution for lab 5</h1>
+
+Basic solution:
+<code>
+#include &lt;iostream&gt;
+#include &lt;stack&gt;
+#include &lt;sstream&gt;
+#include &lt;cmath&gt;
+using namespace std;
+
+int main()
+{
+	stack&lt;double&gt; z;
+	string expr;
+
+	while (getline(cin, expr)) {
+		stringstream ts{expr};
+		string token;
+		double a, b;
+
+		while (ts &gt;&gt; token) {
+			if (token == "+") {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(a + b);
+			} else if (token == "-") {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(a - b);
+			} else if (token == "*") {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(a * b);
+			} else if (token == "/") {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(a / b);
+			} else if (token == "%") {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(fmod(a, b));
+			} else if (token == "^") {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(pow(a, b));
+			} else if (token == "sqrt") {
+				a = z.top(); z.pop();
+				z.push(sqrt(a));
+			} else if (token == "sin") {
+				a = z.top(); z.pop();
+				z.push(sin(a));
+			} else if (token == "cos") {
+				a = z.top(); z.pop();
+				z.push(cos(a));
+			} else if (token == "tan") {
+				a = z.top(); z.pop();
+				z.push(tan(a));
+			} else if (token == "log") {
+				a = z.top(); z.pop();
+				z.push(log10(a));
+			} else if (token == "ln") {
+				a = z.top(); z.pop();
+				z.push(log(a));
+			} else if (token == "e") {
+				z.push(M_E);
+			} else if (token == "pi") {
+				z.push(M_PI);
+			} else {
+				z.push(stod(token));
+			}
+		}
+
+		cout &lt;&lt; endl &lt;&lt; z.top() &lt;&lt; endl;
+	}
+	return 0;
+}
+</code>
+
+Advanced solution:
+
+<code>
+#include &lt;iostream&gt;
+#include &lt;stack&gt;
+#include &lt;sstream&gt;
+#include &lt;cmath&gt;
+#include &lt;functional&gt;
+#include &lt;map&gt;
+using namespace std;
+
+map&lt; string, function&lt;double(double)&gt; &gt; unops = {
+	{ "sqrt", [](double x){ return sqrt(x); } },
+	{ "sin", [](double x){ return sin(x); } },
+	{ "cos", [](double x){ return cos(x); } },
+	{ "tan", [](double x){ return tan(x); } },
+	{ "log", [](double x){ return log10(x); } },
+	{ "ln", [](double x){ return log(x); } }
+};
+
+map&lt; string, function&lt;double(double, double)&gt; &gt; binops = {
+	{ "+", [](double a, double b){ return a + b; } },
+	{ "-", [](double a, double b){ return a - b; } },
+	{ "*", [](double a, double b){ return a * b; } },
+	{ "/", [](double a, double b){ return a / b; } },
+	{ "%", [](double a, double b){ return fmod(a, b); } },
+	{ "^", [](double a, double b){ return pow(a, b); } }
+};
+
+int main()
+{
+	stack&lt;double&gt; z;
+	string expr;
+
+	while (getline(cin, expr)) {
+		string token;
+		stringstream ts{expr};
+		map&lt; string, function&lt;double(double)&gt; &gt;::iterator unops_it;
+		map&lt; string, function&lt;double(double, double)&gt; &gt;::iterator binops_it;
+
+		while (ts &gt;&gt; token) {
+			double a, b;
+			if (token == "e") {
+				z.push(M_E);
+			} else if (token == "pi") {
+				z.push(M_PI);
+			} else if ((binops_it = binops.find(token)) != binops.end()) {
+				b = z.top(); z.pop();
+				a = z.top(); z.pop();
+				z.push(binops_it-&gt;second(a, b));
+			} else if ((unops_it = unops.find(token)) != unops.end()) {
+				a = z.top(); z.pop();
+				z.push(unops_it-&gt;second(a));
+			} else {
+				z.push(stod(token));
+			}
+		}
+		cout &lt;&lt; endl &lt;&lt; z.top() &lt;&lt; endl;
+	}
+}
+</code>
+
+</body>
+
+</html>
