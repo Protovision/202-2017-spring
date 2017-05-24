@@ -1,0 +1,51 @@
+<html>
+
+<head>
+	<title>Lab 6 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solution for lab 6</h1>
+
+<p>
+slots.cpp will be posted soon.
+</p>
+
+<p>
+deck.cpp
+</p>
+
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt; 
+#include &lt;random&gt;
+using namespace std;
+
+vector&lt;string&gt; high_ranks{ "Jack", "Queen", "King", "Ace" };
+vector&lt;string&gt; suits{ "Clubs", "Diamonds", "Hearts", "Spades" };
+
+int main()
+{
+	vector&lt; pair&lt;string, string&gt; &gt; cards;
+	default_random_engine re{random_device{}()};
+	
+	for (const string&amp; s : suits) {
+		for (int i = 2; i &lt;= 10; ++i)
+			cards.push_back(make_pair(to_string(i), s));
+		for (const string&amp; r : high_ranks)
+			cards.push_back(make_pair(r, s));
+	}
+	shuffle(cards.begin(), cards.end(), re);
+	for (const pair&lt;string, string&gt;&amp; p : cards)
+		cout &lt;&lt; p.first &lt;&lt; " of " &lt;&lt; p.second &lt;&lt; endl;
+	return 0;
+}
+</code>
+
+</body>
+
+</html>
