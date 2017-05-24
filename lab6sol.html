@@ -11,8 +11,53 @@
 <h1>Possible solution for lab 6</h1>
 
 <p>
-slots.cpp will be posted soon.
+slots.cpp
 </p>
+<code>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;array&gt;
+#include &lt;random&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main()
+{
+	int coins = 100, choice, won;
+	array&lt;int, 3&gt; slots;
+	default_random_engine re{random_device{}()};
+	uniform_int_distribution&lt;int&gt; d(0, 9);
+
+	while (coins &gt; 0) {
+		do {
+			cout &lt;&lt;
+				"You have " &lt;&lt; coins &lt;&lt; " coins" &lt;&lt; endl &lt;&lt;
+				"1) Bet 1 coin" &lt;&lt; endl &lt;&lt; 
+				"2) Bet 2 coins" &lt;&lt; endl &lt;&lt;
+				"3) Bet 3 coins" &lt;&lt; endl &lt;&lt;
+				"4) Quit" &lt;&lt; endl &lt;&lt; endl;
+			if (not (cin &gt;&gt; choice)) return 0;
+		} while (choice &lt; 1 or choice &gt; 4);
+		if (choice == 4) return 0;
+		coins -= choice;
+		generate(slots.begin(), slots.end(),
+			[&amp;](){ return d(re); }
+		);
+		cout &lt;&lt; "You rolled: ";
+		for (int x : slots) cout &lt;&lt; x &lt;&lt; ' ';
+		cout &lt;&lt; endl;
+		if (count_if(slots.begin(), slots.end(),
+			[&amp;](const int&amp; x) { return x == slots.front(); }
+			) == 3
+		) {
+			won = 300 * choice;
+			cout &lt;&lt; "You win " &lt;&lt; won &lt;&lt; " coins." &lt;&lt; endl;
+		} else won = 0;
+		coins += won;
+	}
+	return 0;
+}
+</code>
 
 <p>
 deck.cpp
