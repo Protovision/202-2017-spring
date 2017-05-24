@@ -40,15 +40,15 @@ int main()
 		} while (choice &lt; 1 or choice &gt; 4);
 		if (choice == 4) return 0;
 		coins -= choice;
-		generate(slots.begin(), slots.end(),
-			[&amp;](){ return d(re); }
-		);
 		cout &lt;&lt; "You rolled: ";
-		for (int x : slots) cout &lt;&lt; x &lt;&lt; ' ';
+		for (int&amp; s : slots) {
+			s = d(re);
+			cout &lt;&lt; s &lt;&lt; ' ';
+		}
 		cout &lt;&lt; endl;
 		if (count_if(slots.begin(), slots.end(),
 			[&amp;](const int&amp; x) { return x == slots.front(); }
-			) == 3
+			) == slots.size()
 		) {
 			won = 300 * choice;
 			cout &lt;&lt; "You win " &lt;&lt; won &lt;&lt; " coins." &lt;&lt; endl;
