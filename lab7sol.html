@@ -1,0 +1,137 @@
+<html>
+
+<head>
+	<title>Lab 7 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solution for lab 7</h1>
+
+<p>
+Deck.cpp
+</p>
+<code>
+#include "Deck.h"
+#include &lt;map&gt;
+
+std::string Card::to_string() const
+{
+	std::string s;
+	std::map&lt;int, std::string&gt; suits = {
+		{ 1, "Clubs" },
+		{ 2, "Diamonds"},
+		{ 3, "Hearts" },
+		{ 4, "Spades" }
+	};
+	std::map&lt;int, std::string&gt; high_ranks = {
+		{ 11, "Jack" },
+		{ 12, "Queen" },
+		{ 13, "King" },
+		{ 14, "Ace" }
+	};
+	if (this-&gt;rank &lt;= 10)
+		s += std::to_string(this-&gt;rank);
+	else
+		s += high_ranks[this-&gt;rank];
+	s += " of ";
+	s += suits[this-&gt;suit];
+	return s;	
+}
+
+Deck::Deck()
+{
+	this-&gt;re = std::default_random_engine{std::random_device{}()};
+	this-&gt;reset();
+}
+
+void Deck::shuffle()
+{
+	std::shuffle(this-&gt;cards.begin(), this-&gt;cards.end(), this-&gt;re);
+}
+
+void Deck::reset()
+{
+	int r, s;
+	this-&gt;cards = {};
+	for (s = 1; s &lt;= 4; ++s) {
+		for (r = 2; r &lt;= 14; ++r) {
+			this-&gt;cards.push_back(Card{r, s});
+		}
+	}
+}
+
+Card Deck::draw()
+{
+	Card c = this-&gt;cards.back();
+	this-&gt;cards.pop_back();
+	return c;
+}
+
+bool Deck::empty() const
+{
+	return this-&gt;cards.empty();
+}
+</code>
+
+<p>
+ph.cpp
+</p>
+<code>
+#include "Deck.h"
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main()
+{
+	Deck deck;
+	vector&lt;Card&gt; hand;
+	map&lt;int, int&gt; freq;
+
+	deck.shuffle();
+	for (int i = 0; i &lt; 5; ++i) {
+		Card c = deck.draw();
+		cout &lt;&lt; c.to_string() &lt;&lt; endl;
+		hand.push_back(c);
+	}
+	cout &lt;&lt; endl;
+
+	for (const Card&amp; c : hand)
+		freq[c.rank]++;
+
+	bool has_quad = find_if(freq.begin(), freq.end(),
+		[](const pair&lt;int, int&gt;&amp; p) {
+			return p.second == 4;
+		}) != freq.end();	
+	bool has_triple = find_if(freq.begin(), freq.end(),
+		[](const pair&lt;int, int&gt;&amp; p) {
+			return p.second == 3;
+		}) != freq.end();
+	int num_pairs = count_if(freq.begin(), freq.end(),
+		[](const pair&lt;int, int&gt;&amp; p) {
+			return p.second == 2;
+		});
+
+	if (has_quad) 
+		cout &lt;&lt; "Four of a kind" &lt;&lt; endl;
+	else if (has_triple and num_pairs == 1)
+		cout &lt;&lt; "Full house" &lt;&lt; endl;
+	else if (has_triple and num_pairs == 0)
+		cout &lt;&lt; "Three of a kind" &lt;&lt; endl;
+	else if (num_pairs == 2)
+		cout &lt;&lt; "Two pair" &lt;&lt; endl;
+	else if (num_pairs == 1)
+		cout &lt;&lt; "One pair" &lt;&lt; endl;
+	else
+		cout &lt;&lt; "Nothing" &lt;&lt; endl;
+}
+</code>
+
+</body>
+
+</html>
