@@ -1,0 +1,91 @@
+<html> 
+<head>
+	<title>Lab 8</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Lab 8</h1>
+
+<p>
+Store all of your files for this lab in a folder named "lab8". 
+</p>
+
+<h3>Exercise 1</h3>
+
+<p>
+Copy either your implementation or the solution to Deck.h and Deck.cpp from last lab to your lab8 folder.
+</p>
+
+<p>
+Modify the Card class in Deck.h and Deck.cpp to implement the following signature:
+</p>
+
+<code>
+class Card {
+public:
+	int rank;
+	int suit;
+
+	/* Initializes the rank and suit of this object to r and s, respectively */
+	Card(int r, int s);
+
+	/* Constructs the class from a string representing the abbreviated value of the card.
+	 * For example "6H" means rank of 6 and suit of 3, "QS" means rank of 12 and suit of 4,
+	 * "10D" means rank of 10 and suit of 2.
+	 */
+	Card(std::string str);
+
+	/* Returns the abbreviated string representation of this Card in the same 
+	 * format as described in the constructor
+	 */
+	std::string to_string() const;
+
+	/* Returns true if the rank of this object is less than the rank of the 
+	 * other object */
+	bool operator&lt;(const Card&amp; other) const;
+};
+</code>
+
+
+<h3>Exercise 2</h3>
+
+<p>Use the Deck class from last lab and your modified Card class to complete this exercise.</p>
+
+<p>
+Create a program that determines the type of poker hand of 5 cards specified on the command-line. The hand will be specified by whitespace-delimited list of card abbreviations in argv[1]. Each card will be represented by up to three characters: the rank and the suit. Name the source ph.cpp and the program ph. For example, the following command would specify Queen of Hearts, 10 of Hearts, 7 of Clubs, 6 of Hearts, and 4 of Spades:
+</p>
+
+<code>
+./ph "QH 10H 7C 6H 4S"
+</code>
+
+<p>
+The result of your command for the above example would display:
+</p>
+
+<code>
+Nothing
+</code>
+
+<p>
+Here are the types of poker hands the program should determine (from best hand to worst):
+</p>
+
+<ul>
+	<li>Straight flush: Five cards of sequential rank, all of the same suit</li>
+	<li>Four of a kind: Four cards of the same rank and one card of a different rank</li>
+	<li>Full house: Three cards of one rank and two cards of another rank</li>
+	<li>Flush: Five cards of the same suit, not of sequential rank</li>
+	<li>Straight: Five cards of sequential rank, not all of the same suit</li>
+	<li>Three of a kind: Three cards of one rank and two cards of two other ranks</li>
+	<li>Two pair: Two cards of one rank, two cards of a second rank, and 1 card of a third rank</li>
+	<li>One pair: Two cards of one rank and 3 cards of three other ranks</li>
+	<li>Nothing: Five cards not all of sequential rank, not all of the same suit, and no repeated ranks. (A hand that doesn't fall into any of the above categories)</li>
+</ul>
+
+</body>
+
+</html>
