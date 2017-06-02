@@ -1,0 +1,266 @@
+<html>
+
+<head>
+	<title>Lab 8 Solutions</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+
+<h1>Possible solution for lab 8</h1>
+
+
+<p>
+ph.cpp
+</p>
+<code>
+#include "Deck.h"
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+#include &lt;array&gt;
+#include &lt;algorithm&gt;
+#include &lt;map&gt;
+using namespace std;
+
+array&lt;Card, 5&gt; parse_hand(const string&amp; str);
+string poker_hand_name(const array&lt;Card, 5&gt;&amp; hand);
+bool is_sequential(const array&lt;Card, 5&gt;&amp; hand);
+bool is_same_suit(const array&lt;Card, 5&gt;&amp; hand);
+
+int main(int argc, char* argv[])
+{
+	array&lt;Card, 5&gt; hand;
+
+	hand = parse_hand(argv[1]);
+	cout &lt;&lt; poker_hand_name(hand) &lt;&lt; endl;
+	return 0;
+}
+
+array&lt;Card, 5&gt; parse_hand(const string&amp; str)
+{
+	int i = 0;
+	array&lt;Card, 5&gt; hand;
+	stringstream ss{str};
+	string card;
+
+	while (ss &gt;&gt; card)
+		hand[i++] = Card{card};
+	return hand;
+}
+
+string poker_hand_name(const array&lt;Card, 5&gt;&amp; hand)
+{
+	bool sequential, same_suit, quad, triple;
+	int num_pairs;
+	map&lt;int, int&gt; freq;
+
+	sequential = is_sequential(hand);
+	same_suit = is_same_suit(hand);
+	for (const Card&amp; c : hand) freq[c.rank]++;
+
+	class second_equals {
+	public:
+		int value;
+		bool operator()(const pair&lt;const int, int&gt;&amp; p) const
+		{
+			return p.second == value;
+		}
+	};
+
+	quad = find_if(freq.begin(), freq.end(), second_equals{4}) != freq.end();
+	triple = find_if(freq.begin(), freq.end(), second_equals{3}) != freq.end();
+	num_pairs = count_if(freq.begin(), freq.end(), second_equals{2});
+
+	if (sequential and same_suit) return "Straight Flush";
+	else if (quad) return "Four of a Kind";
+	else if (triple and num_pairs == 1) return "Full House";
+	else if (same_suit) return "Flush";
+	else if (sequential) return "Straight";
+	else if (triple) return "Three of a Kind";
+	else if (num_pairs == 2) return "Two Pair";
+	else if (num_pairs == 1) return "One Pair";
+	return "Nothing";
+}
+
+bool is_sequential(const array&lt;Card, 5&gt;&amp; hand)
+{
+	array&lt;Card, 5&gt; hand_copy{hand};
+	auto is_real_sequential =
+		[](const array&lt;Card, 5&gt;&amp; hand)
+		{
+			int i;
+			array&lt;Card, 5&gt; sorted_hand{hand};
+			sort(sorted_hand.begin(), sorted_hand.end());
+			for (i = 1; i &lt; 5; ++i) {
+				if (sorted_hand[i].rank - sorted_hand[i-1].rank != 1)
+					return false;
+			}
+			return true;
+		};
+	if (is_real_sequential(hand_copy)) return true;
+	for (Card&amp; c : hand_copy)
+		if (c.rank == 14) c.rank = 1;
+	return is_real_sequential(hand_copy);
+}
+
+bool is_same_suit(const array&lt;Card, 5&gt;&amp; hand)
+{
+	return count_if(
+		hand.begin(),
+		hand.end(),
+		[&amp;](const Card&amp; c)
+		{
+			return c.suit == hand.front().suit;
+		}
+	) == 5;
+}
+</code>
+
+<p>
+Deck.h
+</p>
+<code>
+#ifndef DECK_H
+#define DECK_H
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;random&gt;
+#include &lt;algorithm&gt;
+#include &lt;map&gt;
+
+class Card {
+public:
+	int rank;
+	int suit;
+	Card();
+	Card(int r, int s);
+	Card(std::string str);
+	std::string to_string() const;
+	bool operator&lt;(const Card&amp; other) const;
+};
+
+class Deck {
+private:
+	std::vector&lt;Card&gt; cards;
+	std::default_random_engine re;
+public:
+	Deck();	
+	void shuffle();
+	void reset();
+	Card draw();
+	bool empty() const;
+};
+
+#endif
+</code>
+
+<p>
+Deck.cpp
+</p>
+<code>
+#include "Deck.h"
+
+Card::Card()
+{
+	this-&gt;rank = 0;
+	this-&gt;suit = 0;
+}
+
+Card::Card(int r, int s)
+{
+	this-&gt;rank = r;
+	this-&gt;suit = s;
+}
+
+Card::Card(std::string str)
+{
+	char suit;
+	std::string rank;
+	std::map&lt;char, int&gt; suit_values = {
+		{ 'C', 1 },
+		{ 'D', 2 },
+		{ 'H', 3 },
+		{ 'S', 4 }
+	};
+	std::map&lt;char, int&gt; high_rank_values = {
+		{ 'J', 11 },
+		{ 'Q', 12 },
+		{ 'K', 13 },
+		{ 'A', 14 }
+	};
+	suit = str.back();
+	str.pop_back();
+	this-&gt;suit = suit_values[suit];
+	rank = str;
+	if (rank[0] &gt;= '0' and rank[0] &lt;= '9')
+		this-&gt;rank = stoi(rank);
+	else
+		this-&gt;rank = high_rank_values[rank[0]];
+}
+
+std::string Card::to_string() const
+{
+	std::string s;
+	std::map&lt;int, char&gt; suits = {
+		{ 1, 'C' },
+		{ 2, 'D' },
+		{ 3, 'H' },
+		{ 4, 'S' }
+	};
+	std::map&lt;int, char&gt; high_ranks = {
+		{ 11, 'J' },
+		{ 12, 'Q' },
+		{ 13, 'K' },
+		{ 14, 'A' }
+	};
+	if (this-&gt;rank &lt;= 10)
+		s += std::to_string(this-&gt;rank);
+	else
+		s += high_ranks[this-&gt;rank];
+	s += suits[this-&gt;suit];
+	return s;
+}
+
+bool Card::operator&lt;(const Card&amp; other) const
+{
+	return this-&gt;rank &lt; other.rank;
+}
+
+Deck::Deck()
+{
+	this-&gt;re = std::default_random_engine{std::random_device{}()};
+	this-&gt;reset();
+}
+
+void Deck::shuffle()
+{
+	std::shuffle(this-&gt;cards.begin(), this-&gt;cards.end(), this-&gt;re);
+}
+
+void Deck::reset()
+{
+	for (int s = 1; s &lt;= 4; ++s) {
+		for (int r = 2; r &lt;= 14; ++r) {
+			this-&gt;cards.push_back(Card{r, s});
+		}
+	}
+}
+
+Card Deck::draw()
+{
+	Card c = this-&gt;cards.back();
+	this-&gt;cards.pop_back();
+	return c;
+}
+
+bool Deck::empty() const
+{
+	return this-&gt;cards.empty();
+}
+</code>
+
+</body>
+
+</html>
