@@ -51,11 +51,33 @@ Your program should meet these specifications:
 	<li>Before each deal, the total score of the current user should be displayed and the grid should be displayed with it's rows and columns labeled.</li>
 	<li>The cards on the grid should be shown as abbreviations ("KD" for King of Diamonds, "10H" for 10 of Hearts, "2C" for 2 of Clubs, etc.)</li>
 	<li>The user should specify the coordinate of where to place the dealt card</li>
+	<li>The current score should be updated when an entire row or column as been filled.</li>
 	<li>At the end of the game, the top 3 high scores should be displayed as well as the users who attained those scores</li>
 </ul>
 
 <p>
 You may name your source file(s) whatever you like, place the compiler command that you use into a script file named "build.sh"
+</p>
+
+<p>
+An sh file contains Bash commands. Executing an sh file will execute all the Bash commands in that file, line by line. Here is an example of a possible build.sh script for this assignment:
+</p>
+
+<code>
+#!/bin/bash
+g++-5 -std=c++14 main.cpp Deck.cpp
+</code>
+
+<p>
+The above build script will compile main.cpp and Deck.cpp to produce an executable file named a.out. To execute build.sh, it must be marked as executable itself. After creating build.sh, use the following command to mark build.sh as executable:
+</p>
+
+<code>
+chmod +x build.sh
+</code>
+
+<p>
+Now you may run build.sh in the current directory with the <tt>./build.sh</tt> command. Everytime you edit your source files, you may run <tt>./build.sh</tt> to recompile your source files. Having a build script not only relieves you of having to memorize or re-type the compilation command(s), but it makes it easier for other people to compile your project.
 </p>
 
 <p>
